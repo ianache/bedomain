@@ -1,7 +1,7 @@
 package com.bedomain.service;
 
 import com.bedomain.dto.*;
-import com.bedomain.entity.EntityType;
+import com.bedomain.domain.entity.EntityType;
 import com.bedomain.exception.EntityNotFoundException;
 import com.bedomain.repository.EntityTypeRepository;
 import com.bedomain.security.JwtAuthenticationService;
@@ -25,7 +25,7 @@ public class EntityTypeService {
     @Transactional
     @CacheEvict(value = "entityTypes", allEntries = true)
     public EntityTypeResponse create(CreateEntityTypeRequest request) {
-        if (entityTypeRepository.existsByName(request.getName())) {
+        if (entityTypeRepository.existsByNameAndDeletedFalse(request.getName())) {
             throw new IllegalArgumentException("Entity type with name '" + request.getName() + "' already exists");
         }
 
@@ -41,7 +41,7 @@ public class EntityTypeService {
 
     @Transactional(readOnly = true)
     public Page<EntityTypeResponse> findAll(Pageable pageable) {
-        return entityTypeRepository.findAll(pageable).map(this::toResponse);
+        return entityTypeRepository.findByDeletedFalse(pageable).map(this::toResponse);
     }
 
     @Transactional(readOnly = true)
@@ -59,7 +59,7 @@ public class EntityTypeService {
             .orElseThrow(() -> new EntityNotFoundException("Entity type not found: " + id));
 
         if (request.getName() != null && !request.getName().equals(entityType.getName())) {
-            if (entityTypeRepository.existsByName(request.getName())) {
+            if (entityTypeRepository.existsByNameAndDeletedFalse(request.getName())) {
                 throw new IllegalArgumentException("Entity type with name '" + request.getName() + "' already exists");
             }
             entityType.setName(request.getName());
@@ -77,10 +77,11 @@ public class EntityTypeService {
     @Transactional
     @CacheEvict(value = "entityTypes", allEntries = true)
     public void delete(UUID id) {
-        if (!entityTypeRepository.existsById(id)) {
-            throw new EntityNotFoundException("Entity type not found: " + id);
-        }
-        entityTypeRepository.deleteById(id);
+        EntityType entityType = entityTypeRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Entity type not found: " + id));
+        entityType.setDeleted(true);
+        entityType.setUpdatedBy(jwtAuthenticationService.getRequiredUserId());
+        entityTypeRepository.save(entityType);
     }
 
     @Transactional(readOnly = true)
