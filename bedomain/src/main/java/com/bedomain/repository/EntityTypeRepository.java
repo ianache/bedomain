@@ -1,6 +1,6 @@
 package com.bedomain.repository;
 
-import com.bedomain.entity.EntityType;
+import com.bedomain.domain.entity.EntityType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,7 +14,7 @@ public interface EntityTypeRepository extends JpaRepository<EntityType, UUID> {
 
     Optional<EntityType> findByName(String name);
 
-    boolean existsByName(String name);
+    Page<EntityType> findByDeletedFalse(Pageable pageable);
 
-    Page<EntityType> findAll(Pageable pageable);
+    boolean existsByNameAndDeletedFalse(String name);
 }
