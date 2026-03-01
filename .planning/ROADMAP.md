@@ -55,13 +55,14 @@ Phases execute in numeric order: 1 → 2 → 3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Entity Foundation | 1/3 | In Progress | - |
+| 1. Entity Foundation | 2/3 | In Progress | - |
 | 2. State Machine Core | 0/2 | Not started | - |
 | 3. Event Publishing | 0/2 | Not started | - |
 
 **Phase 1 Plans:**
 - [x] 01-01-PLAN.md — Infrastructure & Security Setup (2026-03-01)
-- [ ] 01-02-PLAN.md — Entity Type & Property Management API
+- [x] 01-02a-PLAN.md — Domain Entities, DTOs, Repositories (2026-03-01)
+- [ ] 01-02b-PLAN.md — Entity Type & Property Management API
 - [ ] 01-03-PLAN.md — Entity Instance Management API
 
 ---
