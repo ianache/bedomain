@@ -10,28 +10,29 @@ See: .planning/PROJECT.md (updated 2026-03-01)
 ## Current Position
 
 Phase: 1 of 3 (Entity Foundation)
-Plan: 2 of 3 in current phase
+Plan: 3 of 3 in current phase
 Status: In Progress
-Last activity: 2026-03-01 — Completed 01-02a (Domain Entities, DTOs, Repositories)
+Last activity: 2026-03-01 — Completed 01-02b (Services and Controllers)
 
-Progress: [████░░░░░░░░] 67%
+Progress: [██████░░░░░░] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
+- Total plans completed: 3
 - Average duration: 4 min
-- Total execution time: 0.13 hours
+- Total execution time: 0.2 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1 | 2 | 3 | 4 min |
+| 1 | 3 | 3 | 4 min |
 
 **Recent Trend:**
 - 01-01: Infrastructure Foundation - 3 min
 - 01-02a: Domain Entities, DTOs, Repositories - 5 min
+- 01-02b: Services and Controllers - 5 min
 
 *Updated after each plan completion*
 
@@ -50,6 +51,10 @@ Recent decisions affecting current work:
   - Caching: Redis with cache-aside pattern
   - Health: Spring Boot Actuator
 
+### Decisions Made This Session
+
+- 01-02b: Implemented soft delete for entity types using deleted flag pattern
+
 ### Pending Todos
 
 [From .planning/todos/pending/ — ideas captured during sessions]
@@ -65,5 +70,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-01
-Stopped at: Completed 01-02a (Domain Entities, DTOs, Repositories)
+Stopped at: Completed 01-02b (Services and Controllers)
 Resume file: None - ready for next plan

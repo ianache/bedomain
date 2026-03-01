@@ -9,19 +9,19 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Entity Type Management
 
-- [ ] **ETYP-01**: User can create entity type with name and description
-- [ ] **ETYP-02**: User can list all entity types
-- [ ] **ETYP-03**: User can get entity type by ID
-- [ ] **ETYP-04**: User can update entity type
-- [ ] **ETYP-05**: User can delete entity type
+- [x] **ETYP-01**: User can create entity type with name and description
+- [x] **ETYP-02**: User can list all entity types
+- [x] **ETYP-03**: User can get entity type by ID
+- [x] **ETYP-04**: User can update entity type
+- [x] **ETYP-05**: User can delete entity type
 
 ### Property Specifications
 
-- [ ] **PROP-01**: User can add property specification to entity type (name, description, data type)
-- [ ] **PROP-02**: User can list property specifications for an entity type
-- [ ] **PROP-03**: User can update property specification
-- [ ] **PROP-04**: User can delete property specification
-- [ ] **PROP-05**: Property specifications support domain data types (STRING, NUMBER, DATE, BOOLEAN, TEXT)
+- [x] **PROP-01**: User can add property specification to entity type (name, description, data type)
+- [x] **PROP-02**: User can list property specifications for an entity type
+- [x] **PROP-03**: User can update property specification
+- [x] **PROP-04**: User can delete property specification
+- [x] **PROP-05**: Property specifications support domain data types (STRING, NUMBER, DATE, BOOLEAN, TEXT)
 
 ### Entity Instance Management
 
