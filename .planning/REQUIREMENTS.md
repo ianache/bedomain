@@ -69,10 +69,20 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Infrastructure
 
-- [ ] **INFRA-01**: Application connects to MySQL database
-- [ ] **INFRA-02**: Application connects to Redis for caching
+- [x] **INFRA-01**: Application connects to MySQL database
+- [x] **INFRA-02**: Application connects to Redis for caching
 - [ ] **INFRA-03**: Application connects to Kafka for event publishing
-- [ ] **INFRA-04**: Application health endpoint available
+- [x] **INFRA-04**: Application health endpoint available
+
+### Testing (Required for All Phases)
+
+All new phases must include JUnit tests with minimum 80% code coverage.
+
+- [ ] **TEST-01**: Phase 2 includes unit tests for state machine services
+- [ ] **TEST-02**: Phase 2 includes unit tests for state machine controllers
+- [ ] **TEST-03**: Phase 2 achieves 80%+ test coverage
+- [ ] **TEST-04**: Phase 3 includes unit tests for Kafka event publishing
+- [ ] **TEST-05**: Phase 3 achieves 80%+ test coverage
 
 ## v2 Requirements
 
@@ -103,28 +113,38 @@ Explicitly excluded. Documented to prevent scope creep.
 | Web UI | API-first, consumer services build UIs |
 | Real-time WebSocket updates | Complexity not needed for v1 |
 
+## Testing Standards
+
+All future phases must include:
+
+1. **Unit Tests**: JUnit 5 with Mockito for all service and controller classes
+2. **Coverage Target**: Minimum 80% line coverage (services + controllers)
+3. **Test Naming**: {ClassName}Test with descriptive test method names
+4. **Test Dependencies**: H2 in-memory database for integration tests
+5. **Coverage Tool**: JaCoCo Maven plugin
+
 ## Traceability
 
 Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ETYP-01 | Phase 1 | Pending |
-| ETYP-02 | Phase 1 | Pending |
-| ETYP-03 | Phase 1 | Pending |
-| ETYP-04 | Phase 1 | Pending |
-| ETYP-05 | Phase 1 | Pending |
-| PROP-01 | Phase 1 | Pending |
-| PROP-02 | Phase 1 | Pending |
-| PROP-03 | Phase 1 | Pending |
-| PROP-04 | Phase 1 | Pending |
-| PROP-05 | Phase 1 | Pending |
-| ENTY-01 | Phase 1 | Pending |
-| ENTY-02 | Phase 1 | Pending |
-| ENTY-03 | Phase 1 | Pending |
-| ENTY-04 | Phase 1 | Pending |
-| ENTY-05 | Phase 1 | Pending |
-| ENTY-06 | Phase 1 | Pending |
+| ETYP-01 | Phase 1 | Complete |
+| ETYP-02 | Phase 1 | Complete |
+| ETYP-03 | Phase 1 | Complete |
+| ETYP-04 | Phase 1 | Complete |
+| ETYP-05 | Phase 1 | Complete |
+| PROP-01 | Phase 1 | Complete |
+| PROP-02 | Phase 1 | Complete |
+| PROP-03 | Phase 1 | Complete |
+| PROP-04 | Phase 1 | Complete |
+| PROP-05 | Phase 1 | Complete |
+| ENTY-01 | Phase 1 | Complete |
+| ENTY-02 | Phase 1 | Complete |
+| ENTY-03 | Phase 1 | Complete |
+| ENTY-04 | Phase 1 | Complete |
+| ENTY-05 | Phase 1 | Complete |
+| ENTY-06 | Phase 1 | Complete |
 | SM-01 | Phase 2 | Pending |
 | SM-02 | Phase 2 | Pending |
 | SM-03 | Phase 2 | Pending |
@@ -138,21 +158,27 @@ Which phases cover which requirements. Updated during roadmap creation.
 | HIST-01 | Phase 2 | Pending |
 | HIST-02 | Phase 2 | Pending |
 | HIST-03 | Phase 2 | Pending |
+| TEST-01 | Phase 2 | Pending |
+| TEST-02 | Phase 2 | Pending |
+| TEST-03 | Phase 2 | Pending |
 | EVNT-01 | Phase 3 | Pending |
 | EVNT-02 | Phase 3 | Pending |
 | EVNT-03 | Phase 3 | Pending |
 | EVNT-04 | Phase 3 | Pending |
-| AUTH-01 | Phase 1 | Pending |
-| AUTH-02 | Phase 1 | Pending |
-| AUTH-03 | Phase 1 | Pending |
-| INFRA-01 | Phase 1 | Pending |
-| INFRA-02 | Phase 1 | Pending |
+| TEST-04 | Phase 3 | Pending |
+| TEST-05 | Phase 3 | Pending |
+| AUTH-01 | Phase 1 | Complete |
+| AUTH-02 | Phase 1 | Complete |
+| AUTH-03 | Phase 1 | Complete |
+| INFRA-01 | Phase 1 | Complete |
+| INFRA-02 | Phase 1 | Complete |
 | INFRA-03 | Phase 3 | Pending |
-| INFRA-04 | Phase 1 | Pending |
+| INFRA-04 | Phase 1 | Complete |
 
 **Coverage:**
 - v1 requirements: 39 total
-- Mapped to phases: 39
+- Testing requirements: 5
+- Mapped to phases: 44
 - Unmapped: 0 ✓
 
 ---
