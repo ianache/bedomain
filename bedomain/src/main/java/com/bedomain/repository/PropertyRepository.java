@@ -13,4 +13,6 @@ public interface PropertyRepository extends org.springframework.data.jpa.reposit
     List<Property> findByEntityTypeId(UUID entityTypeId);
 
     Optional<Property> findByIdAndEntityTypeId(UUID id, UUID entityTypeId);
+
+    boolean existsByEntityTypeIdAndName(UUID entityTypeId, String name);
 }

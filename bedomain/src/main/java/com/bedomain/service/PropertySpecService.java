@@ -1,11 +1,13 @@
 package com.bedomain.service;
 
-import com.bedomain.dto.*;
-import com.bedomain.entity.EntityType;
-import com.bedomain.entity.PropertySpec;
+import com.bedomain.domain.dto.property.CreatePropertyRequest;
+import com.bedomain.domain.dto.property.PropertyResponse;
+import com.bedomain.domain.dto.property.UpdatePropertyRequest;
+import com.bedomain.domain.entity.EntityType;
+import com.bedomain.domain.entity.Property;
 import com.bedomain.exception.EntityNotFoundException;
 import com.bedomain.repository.EntityTypeRepository;
-import com.bedomain.repository.PropertySpecRepository;
+import com.bedomain.repository.PropertyRepository;
 import com.bedomain.security.JwtAuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,100 +21,96 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PropertySpecService {
 
-    private final PropertySpecRepository propertySpecRepository;
+    private final PropertyRepository propertyRepository;
     private final EntityTypeRepository entityTypeRepository;
     private final JwtAuthenticationService jwtAuthenticationService;
 
     @Transactional
-    public PropertySpecResponse create(UUID entityTypeId, CreatePropertySpecRequest request) {
-        validateEntityTypeExists(entityTypeId);
+    public PropertyResponse create(UUID entityTypeId, CreatePropertyRequest request) {
+        EntityType entityType = entityTypeRepository.findById(entityTypeId)
+            .orElseThrow(() -> new EntityNotFoundException("Entity type not found: " + entityTypeId));
 
-        if (propertySpecRepository.existsByEntityTypeIdAndName(entityTypeId, request.getName())) {
+        if (propertyRepository.existsByEntityTypeIdAndName(entityTypeId, request.getName())) {
             throw new IllegalArgumentException("Property with name '" + request.getName() + "' already exists for this entity type");
         }
 
-        PropertySpec propertySpec = PropertySpec.builder()
-            .entityTypeId(entityTypeId)
+        Property property = Property.builder()
             .name(request.getName())
             .description(request.getDescription())
             .dataType(request.getDataType())
+            .entityType(entityType)
             .createdBy(jwtAuthenticationService.getRequiredUserId())
             .build();
 
-        propertySpec = propertySpecRepository.save(propertySpec);
-        return toResponse(propertySpec);
+        property = propertyRepository.save(property);
+        return toResponse(property);
     }
 
     @Transactional(readOnly = true)
-    public List<PropertySpecResponse> findByEntityTypeId(UUID entityTypeId) {
-        validateEntityTypeExists(entityTypeId);
-        return propertySpecRepository.findByEntityTypeId(entityTypeId).stream()
+    public List<PropertyResponse> findByEntityTypeId(UUID entityTypeId) {
+        if (!entityTypeRepository.existsById(entityTypeId)) {
+            throw new EntityNotFoundException("Entity type not found: " + entityTypeId);
+        }
+        return propertyRepository.findByEntityTypeId(entityTypeId).stream()
             .map(this::toResponse)
             .collect(Collectors.toList());
     }
 
     @Transactional
-    public PropertySpecResponse update(UUID entityTypeId, UUID propertyId, UpdatePropertySpecRequest request) {
-        validateEntityTypeExists(entityTypeId);
+    public PropertyResponse update(UUID entityTypeId, UUID propertyId, UpdatePropertyRequest request) {
+        if (!entityTypeRepository.existsById(entityTypeId)) {
+            throw new EntityNotFoundException("Entity type not found: " + entityTypeId);
+        }
 
-        PropertySpec propertySpec = propertySpecRepository.findById(propertyId)
+        Property property = propertyRepository.findById(propertyId)
             .orElseThrow(() -> new EntityNotFoundException("Property specification not found: " + propertyId));
 
-        if (!propertySpec.getEntityTypeId().equals(entityTypeId)) {
+        if (!property.getEntityType().getId().equals(entityTypeId)) {
             throw new IllegalArgumentException("Property does not belong to the specified entity type");
         }
 
-        if (request.getName() != null && !request.getName().equals(propertySpec.getName())) {
-            if (propertySpecRepository.existsByEntityTypeIdAndName(entityTypeId, request.getName())) {
-                throw new IllegalArgumentException("Property with name '" + request.getName() + "' already exists");
+        if (request.getName().isPresent() && !request.getName().get().equals(property.getName())) {
+            if (propertyRepository.existsByEntityTypeIdAndName(entityTypeId, request.getName().get())) {
+                throw new IllegalArgumentException("Property with name '" + request.getName().get() + "' already exists");
             }
-            propertySpec.setName(request.getName());
+            property.setName(request.getName().get());
         }
 
-        if (request.getDescription() != null) {
-            propertySpec.setDescription(request.getDescription());
+        if (request.getDescription().isPresent()) {
+            property.setDescription(request.getDescription().get());
         }
 
-        if (request.getDataType() != null) {
-            propertySpec.setDataType(request.getDataType());
+        if (request.getDataType().isPresent()) {
+            property.setDataType(request.getDataType().get());
         }
 
-        propertySpec.setUpdatedBy(jwtAuthenticationService.getRequiredUserId());
-        propertySpec = propertySpecRepository.save(propertySpec);
-        return toResponse(propertySpec);
+        property.setUpdatedBy(jwtAuthenticationService.getRequiredUserId());
+        property = propertyRepository.save(property);
+        return toResponse(property);
     }
 
     @Transactional
     public void delete(UUID entityTypeId, UUID propertyId) {
-        validateEntityTypeExists(entityTypeId);
-
-        PropertySpec propertySpec = propertySpecRepository.findById(propertyId)
-            .orElseThrow(() -> new EntityNotFoundException("Property specification not found: " + propertyId));
-
-        if (!propertySpec.getEntityTypeId().equals(entityTypeId)) {
-            throw new IllegalArgumentException("Property does not belong to the specified entity type");
-        }
-
-        propertySpecRepository.deleteById(propertyId);
-    }
-
-    private void validateEntityTypeExists(UUID entityTypeId) {
         if (!entityTypeRepository.existsById(entityTypeId)) {
             throw new EntityNotFoundException("Entity type not found: " + entityTypeId);
         }
+
+        Property property = propertyRepository.findById(propertyId)
+            .orElseThrow(() -> new EntityNotFoundException("Property specification not found: " + propertyId));
+
+        if (!property.getEntityType().getId().equals(entityTypeId)) {
+            throw new IllegalArgumentException("Property does not belong to the specified entity type");
+        }
+
+        propertyRepository.deleteById(propertyId);
     }
 
-    private PropertySpecResponse toResponse(PropertySpec propertySpec) {
-        return PropertySpecResponse.builder()
-            .id(propertySpec.getId())
-            .entityTypeId(propertySpec.getEntityTypeId())
-            .name(propertySpec.getName())
-            .description(propertySpec.getDescription())
-            .dataType(propertySpec.getDataType())
-            .createdAt(propertySpec.getCreatedAt())
-            .createdBy(propertySpec.getCreatedBy())
-            .updatedAt(propertySpec.getUpdatedAt())
-            .updatedBy(propertySpec.getUpdatedBy())
+    private PropertyResponse toResponse(Property property) {
+        return PropertyResponse.builder()
+            .id(property.getId())
+            .name(property.getName())
+            .description(property.getDescription())
+            .dataType(property.getDataType())
             .build();
     }
 }
