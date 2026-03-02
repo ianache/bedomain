@@ -1,6 +1,8 @@
 package com.bedomain.controller;
 
-import com.bedomain.dto.*;
+import com.bedomain.domain.dto.property.CreatePropertyRequest;
+import com.bedomain.domain.dto.property.PropertyResponse;
+import com.bedomain.domain.dto.property.UpdatePropertyRequest;
 import com.bedomain.service.PropertySpecService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,23 +21,23 @@ public class PropertySpecController {
     private final PropertySpecService propertySpecService;
 
     @PostMapping
-    public ResponseEntity<PropertySpecResponse> create(
+    public ResponseEntity<PropertyResponse> create(
             @PathVariable UUID entityTypeId,
-            @Valid @RequestBody CreatePropertySpecRequest request) {
-        PropertySpecResponse response = propertySpecService.create(entityTypeId, request);
+            @Valid @RequestBody CreatePropertyRequest request) {
+        PropertyResponse response = propertySpecService.create(entityTypeId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping
-    public ResponseEntity<List<PropertySpecResponse>> findByEntityTypeId(@PathVariable UUID entityTypeId) {
+    public ResponseEntity<List<PropertyResponse>> findByEntityTypeId(@PathVariable UUID entityTypeId) {
         return ResponseEntity.ok(propertySpecService.findByEntityTypeId(entityTypeId));
     }
 
     @PutMapping("/{propertyId}")
-    public ResponseEntity<PropertySpecResponse> update(
+    public ResponseEntity<PropertyResponse> update(
             @PathVariable UUID entityTypeId,
             @PathVariable UUID propertyId,
-            @RequestBody UpdatePropertySpecRequest request) {
+            @RequestBody UpdatePropertyRequest request) {
         return ResponseEntity.ok(propertySpecService.update(entityTypeId, propertyId, request));
     }
 
