@@ -122,6 +122,7 @@
                 </executions>
                 <configuration>
                     <mainClass>com.bedomain.BedomainApplication</mainClass>
+                    <classifier>exec</classifier>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
