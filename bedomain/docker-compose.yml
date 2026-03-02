@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: bedomain-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: bedomain
+      MYSQL_USER: bedomain
+      MYSQL_PASSWORD: bedomain123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - bedomain-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: bedomain-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - bedomain-network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0.3
+    container_name: bedomain-keycloak
+    command: start-dev
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: dev-file
+    ports:
+      - "8180:8080"
+    networks:
+      - bedomain-network
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+
+volumes:
+  mysql_data:
+  redis_data:
+  keycloak_data:
+
+networks:
+  bedomain-network:
+    driver: bridge
