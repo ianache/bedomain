@@ -1,6 +1,8 @@
 package com.bedomain.controller;
 
-import com.bedomain.dto.*;
+import com.bedomain.domain.dto.entitytype.CreateEntityTypeRequest;
+import com.bedomain.domain.dto.entitytype.EntityTypeResponse;
+import com.bedomain.domain.dto.entitytype.UpdateEntityTypeRequest;
 import com.bedomain.service.EntityTypeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,8 @@
 package com.bedomain.service;
 
-import com.bedomain.dto.*;
+import com.bedomain.domain.dto.entitytype.CreateEntityTypeRequest;
+import com.bedomain.domain.dto.entitytype.EntityTypeResponse;
+import com.bedomain.domain.dto.entitytype.UpdateEntityTypeRequest;
 import com.bedomain.domain.entity.EntityType;
 import com.bedomain.exception.EntityNotFoundException;
 import com.bedomain.repository.EntityTypeRepository;
@@ -58,15 +60,15 @@ public class EntityTypeService {
         EntityType entityType = entityTypeRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Entity type not found: " + id));
 
-        if (request.getName() != null && !request.getName().equals(entityType.getName())) {
-            if (entityTypeRepository.existsByNameAndDeletedFalse(request.getName())) {
-                throw new IllegalArgumentException("Entity type with name '" + request.getName() + "' already exists");
+        if (request.getName().isPresent() && !request.getName().get().equals(entityType.getName())) {
+            if (entityTypeRepository.existsByNameAndDeletedFalse(request.getName().get())) {
+                throw new IllegalArgumentException("Entity type with name '" + request.getName().get() + "' already exists");
             }
-            entityType.setName(request.getName());
+            entityType.setName(request.getName().get());
         }
 
-        if (request.getDescription() != null) {
-            entityType.setDescription(request.getDescription());
+        if (request.getDescription().isPresent()) {
+            entityType.setDescription(request.getDescription().get());
         }
 
         entityType.setUpdatedBy(jwtAuthenticationService.getRequiredUserId());

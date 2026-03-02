@@ -16,4 +16,6 @@ public class EntityTypeResponse {
     private List<PropertyResponse> properties;
     private Instant createdAt;
     private String createdBy;
+    private Instant updatedAt;
+    private String updatedBy;
 }
