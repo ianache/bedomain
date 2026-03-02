@@ -51,6 +51,32 @@ services:
     volumes:
       - keycloak_data:/opt/keycloak/data
 
+  bedomain:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: bedomain-app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USERNAME: bedomain
+      DB_PASSWORD: bedomain123
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/bedomain
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+    networks:
+      - bedomain-network
+
 volumes:
   mysql_data:
   redis_data:
