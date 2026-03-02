@@ -1,0 +1,10 @@
+{
+  "permission": {
+    "read": {
+      "C:/Users/ianache/Desktop/DATA/01-DOCUMENTOS/02-PROYECTOS/101-Personal/01-Vibe-Dev/.opencode/get-shit-done/*": "allow"
+    },
+    "external_directory": {
+      "C:/Users/ianache/Desktop/DATA/01-DOCUMENTOS/02-PROYECTOS/101-Personal/01-Vibe-Dev/.opencode/get-shit-done/*": "allow"
+    }
+  }
+}

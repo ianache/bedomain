@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Property.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bedomain</a> &gt; <a href="index.source.html" class="el_package">com.bedomain.domain.entity</a> &gt; <span class="el_source">Property.java</span></div><h1>Property.java</h1><pre class="source lang-java linenums">package com.bedomain.domain.entity;
+
+import com.bedomain.domain.enums.DataType;
+import jakarta.persistence.*;
+import lombok.*;
+import java.time.Instant;
+import java.util.UUID;
+
+@Entity
+@Table(name = &quot;properties&quot;)
+@Getter
+<span class="pc" id="L12">@Setter</span>
+<span class="nc" id="L13">@NoArgsConstructor</span>
+<span class="fc" id="L14">@AllArgsConstructor</span>
+<span class="pc" id="L15">@Builder</span>
+public class Property {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+<span class="fc" id="L20">    private UUID id;</span>
+
+    @Column(nullable = false)
+<span class="fc" id="L23">    private String name;</span>
+
+<span class="fc" id="L25">    private String description;</span>
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+<span class="fc" id="L29">    private DataType dataType;</span>
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;entity_type_id&quot;)
+<span class="fc" id="L33">    private EntityType entityType;</span>
+
+    @Column(name = &quot;created_at&quot;, nullable = false, updatable = false)
+<span class="nc" id="L36">    private Instant createdAt;</span>
+
+    @Column(name = &quot;created_by&quot;, nullable = false, updatable = false)
+<span class="nc" id="L39">    private String createdBy;</span>
+
+    @Column(name = &quot;updated_at&quot;)
+<span class="nc" id="L42">    private Instant updatedAt;</span>
+
+    @Column(name = &quot;updated_by&quot;)
+<span class="nc" id="L45">    private String updatedBy;</span>
+
+    @PrePersist
+    protected void onCreate() {
+<span class="nc" id="L49">        createdAt = Instant.now();</span>
+<span class="nc" id="L50">        updatedAt = Instant.now();</span>
+<span class="nc" id="L51">    }</span>
+
+    @PreUpdate
+    protected void onUpdate() {
+<span class="nc" id="L55">        updatedAt = Instant.now();</span>
+<span class="nc" id="L56">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

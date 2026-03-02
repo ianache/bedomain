@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EntityInstance.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bedomain</a> &gt; <a href="index.source.html" class="el_package">com.bedomain.domain.entity</a> &gt; <span class="el_source">EntityInstance.java</span></div><h1>EntityInstance.java</h1><pre class="source lang-java linenums">package com.bedomain.domain.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import java.time.Instant;
+import java.util.Map;
+import java.util.UUID;
+
+@Entity
+@Table(name = &quot;entity_instances&quot;)
+@Getter
+<span class="pc" id="L16">@Setter</span>
+<span class="nc" id="L17">@NoArgsConstructor</span>
+<span class="fc" id="L18">@AllArgsConstructor</span>
+<span class="pc bfc" id="L19" title="All 2 branches covered.">@Builder</span>
+public class EntityInstance {
+
+    @Id
+    @GeneratedValue(generator = &quot;UUID&quot;)
+    @GenericGenerator(name = &quot;UUID&quot;, strategy = &quot;org.hibernate.id.UUIDGenerator&quot;)
+<span class="fc" id="L25">    private UUID id;</span>
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;entity_type_id&quot;, nullable = false)
+<span class="fc" id="L29">    private EntityType entityType;</span>
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = &quot;json&quot;)
+<span class="fc" id="L33">    private Map&lt;String, Object&gt; attributes;</span>
+
+    @Column(nullable = false)
+    @Builder.Default
+<span class="fc" id="L37">    private boolean deleted = false;</span>
+
+    @Column(name = &quot;created_at&quot;, nullable = false, updatable = false)
+<span class="fc" id="L40">    private Instant createdAt;</span>
+
+    @Column(name = &quot;created_by&quot;, nullable = false, updatable = false)
+<span class="fc" id="L43">    private String createdBy;</span>
+
+    @Column(name = &quot;updated_at&quot;)
+<span class="fc" id="L46">    private Instant updatedAt;</span>
+
+    @Column(name = &quot;updated_by&quot;)
+<span class="fc" id="L49">    private String updatedBy;</span>
+
+    @PrePersist
+    protected void onCreate() {
+<span class="nc" id="L53">        createdAt = Instant.now();</span>
+<span class="nc" id="L54">        updatedAt = Instant.now();</span>
+<span class="nc" id="L55">    }</span>
+
+    @PreUpdate
+    protected void onUpdate() {
+<span class="nc" id="L59">        updatedAt = Instant.now();</span>
+<span class="nc" id="L60">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

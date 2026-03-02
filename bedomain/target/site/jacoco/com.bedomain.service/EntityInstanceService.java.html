@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EntityInstanceService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bedomain</a> &gt; <a href="index.source.html" class="el_package">com.bedomain.service</a> &gt; <span class="el_source">EntityInstanceService.java</span></div><h1>EntityInstanceService.java</h1><pre class="source lang-java linenums">package com.bedomain.service;
+
+import com.bedomain.domain.dto.entityinstance.CreateEntityInstanceRequest;
+import com.bedomain.domain.dto.entityinstance.EntityInstanceResponse;
+import com.bedomain.domain.dto.entityinstance.UpdateEntityInstanceRequest;
+import com.bedomain.domain.entity.EntityInstance;
+import com.bedomain.domain.entity.EntityType;
+import com.bedomain.exception.EntityNotFoundException;
+import com.bedomain.repository.EntityInstanceRepository;
+import com.bedomain.repository.EntityTypeRepository;
+import com.bedomain.security.JwtAuthenticationService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
+
+@Service
+<span class="fc" id="L21">@RequiredArgsConstructor</span>
+public class EntityInstanceService {
+
+    private final EntityInstanceRepository entityInstanceRepository;
+    private final EntityTypeRepository entityTypeRepository;
+    private final JwtAuthenticationService jwtAuthenticationService;
+
+    @Transactional
+    public EntityInstanceResponse create(CreateEntityInstanceRequest request) {
+<span class="fc" id="L30">        EntityType entityType = entityTypeRepository.findById(request.getEntityTypeId())</span>
+<span class="fc" id="L31">            .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Entity type not found: &quot; + request.getEntityTypeId()));</span>
+
+<span class="fc" id="L33">        EntityInstance entityInstance = EntityInstance.builder()</span>
+<span class="fc" id="L34">            .entityType(entityType)</span>
+<span class="fc" id="L35">            .attributes(request.getAttributes())</span>
+<span class="fc" id="L36">            .createdBy(jwtAuthenticationService.getRequiredUserId())</span>
+<span class="fc" id="L37">            .build();</span>
+
+<span class="fc" id="L39">        entityInstance = entityInstanceRepository.save(entityInstance);</span>
+<span class="fc" id="L40">        return toResponse(entityInstance);</span>
+    }
+
+    @Transactional(readOnly = true)
+    public Page&lt;EntityInstanceResponse&gt; findAll(UUID entityTypeId, Pageable pageable) {
+        Page&lt;EntityInstance&gt; entities;
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (entityTypeId != null) {</span>
+<span class="fc" id="L47">            entities = entityInstanceRepository.findByEntityTypeIdAndDeletedFalse(entityTypeId, pageable);</span>
+        } else {
+<span class="fc" id="L49">            entities = entityInstanceRepository.findByDeletedFalse(pageable);</span>
+        }
+
+<span class="fc" id="L52">        return entities.map(this::toResponse);</span>
+    }
+
+    @Transactional(readOnly = true)
+    public EntityInstanceResponse findById(UUID id) {
+<span class="fc" id="L57">        EntityInstance entityInstance = entityInstanceRepository.findByIdAndDeletedFalse(id)</span>
+<span class="fc" id="L58">            .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Entity instance not found: &quot; + id));</span>
+<span class="fc" id="L59">        return toResponse(entityInstance);</span>
+    }
+
+    @Transactional
+    public EntityInstanceResponse update(UUID id, UpdateEntityInstanceRequest request) {
+<span class="fc" id="L64">        EntityInstance entityInstance = entityInstanceRepository.findByIdAndDeletedFalse(id)</span>
+<span class="fc" id="L65">            .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Entity instance not found: &quot; + id));</span>
+
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if (request.getAttributes() != null) {</span>
+<span class="fc" id="L68">            entityInstance.setAttributes(request.getAttributes());</span>
+        }
+
+<span class="fc" id="L71">        entityInstance.setUpdatedBy(jwtAuthenticationService.getRequiredUserId());</span>
+<span class="fc" id="L72">        entityInstance = entityInstanceRepository.save(entityInstance);</span>
+
+<span class="fc" id="L74">        return toResponse(entityInstance);</span>
+    }
+
+    @Transactional
+    public void delete(UUID id) {
+<span class="fc" id="L79">        EntityInstance entityInstance = entityInstanceRepository.findByIdAndDeletedFalse(id)</span>
+<span class="pc" id="L80">            .orElseThrow(() -&gt; new EntityNotFoundException(&quot;Entity instance not found: &quot; + id));</span>
+        
+<span class="fc" id="L82">        entityInstance.setDeleted(true);</span>
+<span class="fc" id="L83">        entityInstance.setUpdatedBy(jwtAuthenticationService.getRequiredUserId());</span>
+<span class="fc" id="L84">        entityInstanceRepository.save(entityInstance);</span>
+<span class="fc" id="L85">    }</span>
+
+    private EntityInstanceResponse toResponse(EntityInstance entityInstance) {
+<span class="fc" id="L88">        return EntityInstanceResponse.builder()</span>
+<span class="fc" id="L89">            .id(entityInstance.getId())</span>
+<span class="fc" id="L90">            .entityTypeId(entityInstance.getEntityType().getId())</span>
+<span class="fc" id="L91">            .entityTypeName(entityInstance.getEntityType().getName())</span>
+<span class="fc" id="L92">            .attributes(entityInstance.getAttributes())</span>
+<span class="fc" id="L93">            .createdAt(entityInstance.getCreatedAt())</span>
+<span class="fc" id="L94">            .createdBy(entityInstance.getCreatedBy())</span>
+<span class="fc" id="L95">            .updatedAt(entityInstance.getUpdatedAt())</span>
+<span class="fc" id="L96">            .updatedBy(entityInstance.getUpdatedBy())</span>
+<span class="fc" id="L97">            .build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
