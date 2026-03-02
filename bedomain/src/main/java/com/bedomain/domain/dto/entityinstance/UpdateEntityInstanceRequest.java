@@ -1,4 +1,4 @@
-package com.bedomain.dto;
+package com.bedomain.domain.dto.entityinstance;
 
 import lombok.*;
 import java.util.Map;

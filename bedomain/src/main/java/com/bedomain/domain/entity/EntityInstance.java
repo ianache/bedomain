@@ -1,8 +1,13 @@
-package com.bedomain.entity;
+package com.bedomain.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 import java.time.Instant;
+import java.util.Map;
 import java.util.UUID;
 
 @Entity
@@ -15,14 +20,21 @@ import java.util.UUID;
 public class EntityInstance {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     private UUID id;
 
-    @Column(name = "entity_type_id", nullable = false)
-    private UUID entityTypeId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "entity_type_id", nullable = false)
+    private EntityType entityType;
 
-    @Column(columnDefinition = "JSON")
-    private String attributes;
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "json")
+    private Map<String, Object> attributes;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean deleted = false;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;

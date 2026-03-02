@@ -1,4 +1,4 @@
-package com.bedomain.dto;
+package com.bedomain.domain.dto.entityinstance;
 
 import lombok.*;
 import java.time.Instant;
@@ -14,6 +14,7 @@ public class EntityInstanceResponse {
 
     private UUID id;
     private UUID entityTypeId;
+    private String entityTypeName;
     private Map<String, Object> attributes;
     private Instant createdAt;
     private String createdBy;

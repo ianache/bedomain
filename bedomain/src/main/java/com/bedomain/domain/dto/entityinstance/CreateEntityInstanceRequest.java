@@ -1,8 +1,9 @@
-package com.bedomain.dto;
+package com.bedomain.domain.dto.entityinstance;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import java.util.Map;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -12,7 +13,7 @@ import java.util.Map;
 public class CreateEntityInstanceRequest {
 
     @NotNull(message = "Entity type ID is required")
-    private java.util.UUID entityTypeId;
+    private UUID entityTypeId;
 
     private Map<String, Object> attributes;
 }
