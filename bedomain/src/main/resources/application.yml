@@ -80,7 +80,7 @@ spring:
   datasource:
     url: jdbc:mysql://mysql:3306/bedomain?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
     username: bedomain
-    password: bedomain123
+    password: ${DB_PASSWORD:bedomain123}
   data:
     redis:
       host: redis

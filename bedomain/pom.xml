@@ -13,7 +13,7 @@
     
     <groupId>com.bedomain</groupId>
     <artifactId>bedomain</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>bedomain</name>
     <description>Business Entity Domain Management Service</description>
     
@@ -95,6 +95,7 @@
     </dependencies>
     
     <build>
+        <finalName>api</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -122,7 +123,7 @@
                 </executions>
                 <configuration>
                     <mainClass>com.bedomain.BedomainApplication</mainClass>
-                    <classifier>exec</classifier>
+                    <!--classifier>exec</classifier-->
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -159,6 +160,24 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            
+            <!-- OWASP Dependency Check -->
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven-plugin</artifactId>
+                <version>9.0.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <failBuildOnCVSS>7</failBuildOnCVSS>
+                    <suppressFile>.dependency-check-suppressions.xml</suppressFile>
+                </configuration>
             </plugin>
         </plugins>
     </build>
