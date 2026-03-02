@@ -53,7 +53,7 @@ services:
 
   bedomain:
     build:
-      context: ..
+      context: .
       dockerfile: Dockerfile
     container_name: bedomain-app
     ports:
