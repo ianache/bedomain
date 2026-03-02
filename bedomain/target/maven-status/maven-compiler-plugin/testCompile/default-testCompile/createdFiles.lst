@@ -1,7 +1,0 @@
-com\bedomain\controller\EntityTypeControllerTest.class
-com\bedomain\controller\EntityInstanceControllerTest.class
-com\bedomain\service\EntityTypeServiceTest.class
-com\bedomain\service\EntityInstanceServiceTest.class
-com\bedomain\util\TestDataFactory.class
-com\bedomain\controller\PropertySpecControllerTest.class
-com\bedomain\service\PropertySpecServiceTest.class
