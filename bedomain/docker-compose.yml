@@ -77,6 +77,30 @@ services:
     networks:
       - bedomain-network
 
+  k6:
+    image: grafana/k6:latest
+    container_name: bedomain-k6
+    volumes:
+      - ./tests/k6:/scripts
+    environment:
+      - K6_BASE_URL=http://bedomain:8080
+    command: run /scripts/load-test.js
+    profiles:
+      - none
+    networks:
+      - bedomain-network
+
+  newman:
+    image: postman/newman:latest
+    container_name: bedomain-newman
+    volumes:
+      - ./tests/postman:/etc/newman
+    command: run bedomain-api.postman_collection.json
+    profiles:
+      - none
+    networks:
+      - bedomain-network
+
 volumes:
   mysql_data:
   redis_data:
