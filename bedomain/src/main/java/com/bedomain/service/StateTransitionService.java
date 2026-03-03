@@ -2,6 +2,7 @@ package com.bedomain.service;
 
 import com.bedomain.domain.dto.entityinstance.EntityInstanceResponse;
 import com.bedomain.domain.entity.*;
+import com.bedomain.event.EventPublisher;
 import com.bedomain.exception.EntityNotFoundException;
 import com.bedomain.exception.InvalidTransitionException;
 import com.bedomain.repository.EntityInstanceRepository;
@@ -24,6 +25,7 @@ public class StateTransitionService {
     private final StateMachineRepository stateMachineRepository;
     private final StateHistoryService stateHistoryService;
     private final JwtAuthenticationService jwtAuthenticationService;
+    private final EventPublisher eventPublisher;
 
     @Transactional
     public EntityInstanceResponse triggerTransition(UUID entityId, String event) {
@@ -62,7 +64,11 @@ public class StateTransitionService {
         // 7. Record history
         stateHistoryService.record(entity, fromState, newState, event);
 
-        // 8. Return updated entity
+        // 8. Publish state changed event
+        String userId = jwtAuthenticationService.getRequiredUserId();
+        eventPublisher.publishStateChanged(entity, fromState, newState, userId);
+
+        // 9. Return updated entity
         return toResponse(entity);
     }
 
