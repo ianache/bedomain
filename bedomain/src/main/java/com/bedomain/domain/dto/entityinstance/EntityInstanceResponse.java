@@ -16,6 +16,7 @@ public class EntityInstanceResponse {
     private UUID entityTypeId;
     private String entityTypeName;
     private Map<String, Object> attributes;
+    private String currentState;
     private Instant createdAt;
     private String createdBy;
     private Instant updatedAt;
