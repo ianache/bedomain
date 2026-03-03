@@ -5,6 +5,7 @@ import com.bedomain.domain.dto.entityinstance.EntityInstanceResponse;
 import com.bedomain.domain.dto.entityinstance.UpdateEntityInstanceRequest;
 import com.bedomain.domain.entity.EntityInstance;
 import com.bedomain.domain.entity.EntityType;
+import com.bedomain.event.EventPublisher;
 import com.bedomain.exception.EntityNotFoundException;
 import com.bedomain.repository.EntityInstanceRepository;
 import com.bedomain.repository.EntityTypeRepository;
@@ -24,6 +25,7 @@ public class EntityInstanceService {
     private final EntityInstanceRepository entityInstanceRepository;
     private final EntityTypeRepository entityTypeRepository;
     private final JwtAuthenticationService jwtAuthenticationService;
+    private final EventPublisher eventPublisher;
 
     @Transactional
     public EntityInstanceResponse create(CreateEntityInstanceRequest request) {
@@ -37,6 +39,7 @@ public class EntityInstanceService {
             .build();
 
         entityInstance = entityInstanceRepository.save(entityInstance);
+        eventPublisher.publishEntityCreated(entityInstance);
         return toResponse(entityInstance);
     }
 
@@ -70,6 +73,7 @@ public class EntityInstanceService {
 
         entityInstance.setUpdatedBy(jwtAuthenticationService.getRequiredUserId());
         entityInstance = entityInstanceRepository.save(entityInstance);
+        eventPublisher.publishEntityUpdated(entityInstance);
 
         return toResponse(entityInstance);
     }
