@@ -56,8 +56,7 @@ Phases execute in numeric order: 1 → 2 → 3
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Entity Foundation | 5/5 | Complete    | 2026-03-02 |
-| 2. State Machine Core | 0/2 | Not started | - |
-| 3. Event Publishing | 0/2 | Not started | - |
+| 2. State Machine Core | 1/2 | In Progress | - |
 
 **Phase 1 Plans:**
 - [x] 01-01-PLAN.md — Infrastructure & Security Setup (2026-03-01)
@@ -65,6 +64,10 @@ Phases execute in numeric order: 1 → 2 → 3
 - [x] 01-02b-PLAN.md — Entity Type & Property Management API (2026-03-01)
 - [x] 01-03-PLAN.md — Entity Instance Management API (2026-03-02)
 - [x] 01-04-PLAN.md — Gap Closure: Package Consolidation (2026-03-02)
+
+**Phase 2 Plans:**
+- [x] 02-01-PLAN.md — State Machine Configuration & CRUD APIs (2026-03-03)
+- [ ] 02-02-PLAN.md — State Transitions & History
 
 ---
 
