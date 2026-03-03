@@ -7,6 +7,8 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -31,6 +33,13 @@ public class EntityInstance {
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "json")
     private Map<String, Object> attributes;
+
+    @Column(name = "current_state")
+    private String currentState;
+
+    @OneToMany(mappedBy = "entityInstance")
+    @Builder.Default
+    private List<StateHistory> stateHistory = new ArrayList<>();
 
     @Column(nullable = false)
     @Builder.Default
