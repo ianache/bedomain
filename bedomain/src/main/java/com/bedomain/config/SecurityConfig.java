@@ -31,7 +31,6 @@ public class SecurityConfig {
                 .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
             .headers(headers -> headers
                 .frameOptions(frame -> frame.deny())
-                .xssProtection(xss -> xss.enable())
                 .contentTypeOptions(content -> {})
                 .httpStrictTransportSecurity(hsts -> hsts
                     .includeSubDomains(true)
