@@ -56,10 +56,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Business Events
 
-- [ ] **EVNT-01**: System publishes business event to Kafka on state transition
-- [ ] **EVNT-02**: System publishes business event to Kafka on entity creation
-- [ ] **EVNT-03**: System publishes business event to Kafka on entity update
-- [ ] **EVNT-04**: Event includes entity ID, type, previous state, new state, timestamp, user
+- [x] **EVNT-01**: System publishes business event to Kafka on state transition
+- [x] **EVNT-02**: System publishes business event to Kafka on entity creation
+- [x] **EVNT-03**: System publishes business event to Kafka on entity update
+- [x] **EVNT-04**: Event includes entity ID, type, previous state, new state, timestamp, user
 
 ### Authentication & Security
 
@@ -71,7 +71,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **INFRA-01**: Application connects to MySQL database
 - [x] **INFRA-02**: Application connects to Redis for caching
-- [ ] **INFRA-03**: Application connects to Kafka for event publishing
+- [x] **INFRA-03**: Application connects to Kafka for event publishing
 - [x] **INFRA-04**: Application health endpoint available
 
 ### Testing (Required for All Phases)
@@ -161,10 +161,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TEST-01 | Phase 2 | Pending |
 | TEST-02 | Phase 2 | Pending |
 | TEST-03 | Phase 2 | Pending |
-| EVNT-01 | Phase 3 | Pending |
-| EVNT-02 | Phase 3 | Pending |
-| EVNT-03 | Phase 3 | Pending |
-| EVNT-04 | Phase 3 | Pending |
+| EVNT-01 | Phase 3 | Complete |
+| EVNT-02 | Phase 3 | Complete |
+| EVNT-03 | Phase 3 | Complete |
+| EVNT-04 | Phase 3 | Complete |
 | TEST-04 | Phase 3 | Pending |
 | TEST-05 | Phase 3 | Pending |
 | AUTH-01 | Phase 1 | Complete |
@@ -172,7 +172,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTH-03 | Phase 1 | Complete |
 | INFRA-01 | Phase 1 | Complete |
 | INFRA-02 | Phase 1 | Complete |
-| INFRA-03 | Phase 3 | Pending |
+| INFRA-03 | Phase 3 | Complete |
 | INFRA-04 | Phase 1 | Complete |
 
 **Coverage:**
