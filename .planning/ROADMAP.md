@@ -56,7 +56,7 @@ Phases execute in numeric order: 1 → 2 → 3
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Entity Foundation | 5/5 | Complete    | 2026-03-02 |
-| 2. State Machine Core | 1/2 | In Progress | - |
+| 2. State Machine Core | 2/2 | Complete    | 2026-03-03 |
 
 **Phase 1 Plans:**
 - [x] 01-01-PLAN.md — Infrastructure & Security Setup (2026-03-01)
@@ -67,7 +67,7 @@ Phases execute in numeric order: 1 → 2 → 3
 
 **Phase 2 Plans:**
 - [x] 02-01-PLAN.md — State Machine Configuration & CRUD APIs (2026-03-03)
-- [ ] 02-02-PLAN.md — State Transitions & History
+- [x] 02-02-PLAN.md — State Transitions & History (2026-03-03)
 
 ---
 
