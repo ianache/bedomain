@@ -85,6 +85,14 @@ logging:
     com.bedomain: DEBUG
     org.springframework.security: DEBUG
 
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+  redoc:
+    path: /redoc.html
+
 ---
 spring:
   config:
