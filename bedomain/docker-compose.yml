@@ -42,12 +42,14 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
       KC_DB: dev-file
+      KEYCLOAK_IMPORT: /opt/keycloak/data/realm-export.json
     ports:
       - "8180:8080"
     networks:
       - bedomain-network
     volumes:
       - keycloak_data:/opt/keycloak/data
+      - ./realm-export.json:/opt/keycloak/data/realm-export.json:ro
 
   bedomain:
     build:
