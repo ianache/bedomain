@@ -51,7 +51,7 @@ spring:
           jwk-set-uri: ${KEYCLOAK_JWK_SET_URI:http://localhost:8080/realms/bedomain/protocol/openid-connect/certs}
 
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -112,3 +112,5 @@ spring:
         jwt:
           issuer-uri: http://keycloak:8080/realms/bedomain
           jwk-set-uri: http://keycloak:8080/realms/bedomain/protocol/openid-connect/certs
+  kafka:
+    bootstrap-servers: kafka:9092
