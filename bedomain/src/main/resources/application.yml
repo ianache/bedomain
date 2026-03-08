@@ -85,6 +85,14 @@ logging:
     com.bedomain: DEBUG
     org.springframework.security: DEBUG
 
+app:
+  javascript:
+    max-cpu-time-seconds: 2
+    max-statements: 1000
+    max-heap-memory-mb: 64
+    fail-on-error: true
+    policy: CONSTRAINED
+
 springdoc:
   api-docs:
     path: /api-docs
