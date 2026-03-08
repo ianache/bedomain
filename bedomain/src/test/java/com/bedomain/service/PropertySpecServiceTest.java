@@ -285,4 +285,66 @@ class PropertySpecServiceTest {
         // Assert
         verify(propertyRepository).deleteById(propertyId);
     }
+
+    @Test
+    void create_unitTypeAttributes_shouldCreateSuccessfully() {
+        // Arrange: Unit Type attributes - id (UUID), code (external code), date (creation date)
+        
+        EntityType unitTypeEntity = EntityType.builder()
+            .id(UUID.randomUUID())
+            .name("Unit Type")
+            .description("Unidad que puede ser: vehiculo, moto, bicicleta, scotter, persona, paquete")
+            .deleted(false)
+            .createdAt(Instant.now())
+            .createdBy("test-user")
+            .build();
+
+        // CreatePropertyRequest for 'id' attribute (UUID type)
+        CreatePropertyRequest idRequest = new CreatePropertyRequest();
+        idRequest.setName("id");
+        idRequest.setDescription("UUID único de 36 caracteres");
+        idRequest.setDataType(DataType.STRING); // UUID stored as STRING
+
+        // CreatePropertyRequest for 'code' attribute (external code)
+        CreatePropertyRequest codeRequest = new CreatePropertyRequest();
+        codeRequest.setName("code");
+        codeRequest.setDescription("Código externo de la unidad");
+        codeRequest.setDataType(DataType.STRING);
+
+        // CreatePropertyRequest for 'date' attribute (creation date)
+        CreatePropertyRequest dateRequest = new CreatePropertyRequest();
+        dateRequest.setName("date");
+        dateRequest.setDescription("Fecha de creación de la unidad");
+        dateRequest.setDataType(DataType.DATE);
+
+        when(entityTypeRepository.findById(entityTypeId)).thenReturn(Optional.of(unitTypeEntity));
+        when(propertyRepository.existsByEntityTypeIdAndName(entityTypeId, "id")).thenReturn(false);
+        when(propertyRepository.existsByEntityTypeIdAndName(entityTypeId, "code")).thenReturn(false);
+        when(propertyRepository.existsByEntityTypeIdAndName(entityTypeId, "date")).thenReturn(false);
+        
+        when(propertyRepository.save(any(Property.class))).thenAnswer(invocation -> {
+            Property p = invocation.getArgument(0);
+            p.setId(UUID.randomUUID());
+            return p;
+        });
+        when(jwtAuthenticationService.getRequiredUserId()).thenReturn("test-user");
+
+        // Act - Create all three attributes
+        PropertyResponse idResponse = propertySpecService.create(entityTypeId, idRequest);
+        PropertyResponse codeResponse = propertySpecService.create(entityTypeId, codeRequest);
+        PropertyResponse dateResponse = propertySpecService.create(entityTypeId, dateRequest);
+
+        // Assert
+        assertNotNull(idResponse);
+        assertEquals("id", idResponse.getName());
+        assertEquals(DataType.STRING, idResponse.getDataType());
+        
+        assertNotNull(codeResponse);
+        assertEquals("code", codeResponse.getName());
+        assertEquals(DataType.STRING, codeResponse.getDataType());
+        
+        assertNotNull(dateResponse);
+        assertEquals("date", dateResponse.getName());
+        assertEquals(DataType.DATE, dateResponse.getDataType());
+    }
 }

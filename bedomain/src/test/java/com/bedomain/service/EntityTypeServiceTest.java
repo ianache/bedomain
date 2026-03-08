@@ -218,4 +218,38 @@ class EntityTypeServiceTest {
         // Assert
         assertFalse(result);
     }
+
+    @Test
+    void create_unitTypeWithAttributes_shouldCreateSuccessfully() {
+        // Arrange: Unit Type with possible values: vehiculo, moto, bicicleta, scotter, persona, paquete
+        // Attributes: id (UUID), code (external code), date (creation date)
+        
+        CreateEntityTypeRequest unitTypeRequest = new CreateEntityTypeRequest();
+        unitTypeRequest.setName("Unit Type");
+        unitTypeRequest.setDescription("Unidad que puede ser: vehiculo, moto, bicicleta, scotter, persona, paquete");
+
+        EntityType unitTypeEntity = EntityType.builder()
+            .id(UUID.randomUUID())
+            .name("Unit Type")
+            .description("Unidad que puede ser: vehiculo, moto, bicicleta, scotter, persona, paquete")
+            .deleted(false)
+            .createdAt(Instant.now())
+            .createdBy("test-user")
+            .updatedAt(Instant.now())
+            .updatedBy("test-user")
+            .build();
+
+        when(entityTypeRepository.existsByNameAndDeletedFalse("Unit Type")).thenReturn(false);
+        when(entityTypeRepository.save(any(EntityType.class))).thenReturn(unitTypeEntity);
+        when(jwtAuthenticationService.getRequiredUserId()).thenReturn("test-user");
+
+        // Act
+        EntityTypeResponse response = entityTypeService.create(unitTypeRequest);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals("Unit Type", response.getName());
+        assertEquals("Unidad que puede ser: vehiculo, moto, bicicleta, scotter, persona, paquete", response.getDescription());
+        verify(entityTypeRepository).save(any(EntityType.class));
+    }
 }
