@@ -38,6 +38,19 @@ public class StateHistory {
     @Column(nullable = false)
     private Instant timestamp;
 
+    @Column(name = "hook_executed", nullable = false)
+    @Builder.Default
+    private boolean hookExecuted = false;
+
+    @Column(name = "hook_type")
+    private String hookType; // "onEnter" or "onExit"
+
+    @Column(name = "hook_script_hash")
+    private String hookScriptHash; // SHA-256 of script for audit
+
+    @Column(name = "hook_error")
+    private String hookError; // Error message if hook failed
+
     @PrePersist
     protected void onCreate() {
         if (timestamp == null) {

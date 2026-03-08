@@ -13,7 +13,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -26,6 +30,7 @@ public class StateTransitionService {
     private final StateHistoryService stateHistoryService;
     private final JwtAuthenticationService jwtAuthenticationService;
     private final EventPublisher eventPublisher;
+    private final JavaScriptExecutor javascriptExecutor;
 
     @Transactional
     public EntityInstanceResponse triggerTransition(UUID entityId, String event) {
@@ -56,19 +61,84 @@ public class StateTransitionService {
         String newState = validTransition.getToState().getName();
         String fromState = currentState != null ? currentState : "null";
 
-        // 6. Update entity.currentState
+        // 6. Get state specs for hook execution
+        StateSpec fromStateSpec = stateMachine.getStates().stream()
+                .filter(s -> s.getName().equals(fromState))
+                .findFirst()
+                .orElse(null);
+        
+        StateSpec toStateSpec = stateMachine.getStates().stream()
+                .filter(s -> s.getName().equals(newState))
+                .findFirst()
+                .orElse(null);
+
+        // 7. Execute onExit script (from old state)
+        boolean hookExecuted = false;
+        String hookType = null;
+        String hookScriptHash = null;
+        String hookError = null;
+        
+        if (fromStateSpec != null && fromStateSpec.getOnExitScript() != null 
+                && !fromStateSpec.getOnExitScript().isBlank()) {
+            try {
+                Map<String, Object> updatedAttributes = javascriptExecutor.execute(
+                        fromStateSpec.getOnExitScript(),
+                        entity.getAttributes(),
+                        entity.getId(),
+                        "onExit"
+                );
+                entity.setAttributes(updatedAttributes);
+                hookExecuted = true;
+                hookType = "onExit";
+                hookScriptHash = computeScriptHash(fromStateSpec.getOnExitScript());
+            } catch (JavaScriptExecutor.ScriptExecutionException e) {
+                hookError = e.getMessage();
+                hookExecuted = true;
+                hookType = "onExit";
+                hookScriptHash = computeScriptHash(fromStateSpec.getOnExitScript());
+                // If failOnError is true, the exception will propagate
+                throw;
+            }
+        }
+
+        // 8. Execute onEnter script (from new state)
+        if (toStateSpec != null && toStateSpec.getOnEnterScript() != null 
+                && !toStateSpec.getOnEnterScript().isBlank()) {
+            try {
+                Map<String, Object> updatedAttributes = javascriptExecutor.execute(
+                        toStateSpec.getOnEnterScript(),
+                        entity.getAttributes(),
+                        entity.getId(),
+                        "onEnter"
+                );
+                entity.setAttributes(updatedAttributes);
+                hookExecuted = true;
+                hookType = "onEnter";
+                hookScriptHash = computeScriptHash(toStateSpec.getOnEnterScript());
+            } catch (JavaScriptExecutor.ScriptExecutionException e) {
+                hookError = e.getMessage();
+                hookExecuted = true;
+                hookType = "onEnter";
+                hookScriptHash = computeScriptHash(toStateSpec.getOnEnterScript());
+                // If failOnError is true, the exception will propagate
+                throw;
+            }
+        }
+
+        // 9. Update entity.currentState
         entity.setCurrentState(newState);
         entity.setUpdatedBy(jwtAuthenticationService.getRequiredUserId());
         entity = entityInstanceRepository.save(entity);
 
-        // 7. Record history
-        stateHistoryService.record(entity, fromState, newState, event);
+        // 10. Record history with hook info
+        stateHistoryService.record(entity, fromState, newState, event, 
+                hookExecuted, hookType, hookScriptHash, hookError);
 
-        // 8. Publish state changed event
+        // 11. Publish state changed event
         String userId = jwtAuthenticationService.getRequiredUserId();
         eventPublisher.publishStateChanged(entity, fromState, newState, userId);
 
-        // 9. Return updated entity
+        // 12. Return updated entity
         return toResponse(entity);
     }
 
@@ -105,5 +175,24 @@ public class StateTransitionService {
                 .updatedAt(entityInstance.getUpdatedAt())
                 .updatedBy(entityInstance.getUpdatedBy())
                 .build();
+    }
+
+    /**
+     * Compute SHA-256 hash of a script for audit purposes.
+     */
+    private String computeScriptHash(String script) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(script.getBytes(StandardCharsets.UTF_8));
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            return "SHA-256-unavailable";
+        }
     }
 }

@@ -19,4 +19,8 @@ public class StateHistoryResponse {
     private String triggeredBy;
     private Instant timestamp;
     private EntityInstanceResponse currentSnapshot;
+    private boolean hookExecuted;
+    private String hookType;
+    private String hookScriptHash;
+    private String hookError;
 }

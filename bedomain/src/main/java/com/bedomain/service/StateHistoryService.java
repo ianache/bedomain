@@ -25,12 +25,22 @@ public class StateHistoryService {
 
     @Transactional
     public StateHistory record(EntityInstance entityInstance, String fromState, String toState, String event) {
+        return record(entityInstance, fromState, toState, event, false, null, null, null);
+    }
+
+    @Transactional
+    public StateHistory record(EntityInstance entityInstance, String fromState, String toState, String event,
+                               boolean hookExecuted, String hookType, String hookScriptHash, String hookError) {
         StateHistory history = StateHistory.builder()
                 .entityInstance(entityInstance)
                 .fromState(fromState)
                 .toState(toState)
                 .event(event)
                 .triggeredBy(jwtAuthenticationService.getRequiredUserId())
+                .hookExecuted(hookExecuted)
+                .hookType(hookType)
+                .hookScriptHash(hookScriptHash)
+                .hookError(hookError)
                 .build();
 
         return stateHistoryRepository.save(history);
@@ -76,6 +86,10 @@ public class StateHistoryService {
                 .triggeredBy(history.getTriggeredBy())
                 .timestamp(history.getTimestamp())
                 .currentSnapshot(snapshot)
+                .hookExecuted(history.isHookExecuted())
+                .hookType(history.getHookType())
+                .hookScriptHash(history.getHookScriptHash())
+                .hookError(history.getHookError())
                 .build();
     }
 }
