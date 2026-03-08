@@ -74,6 +74,12 @@ Bedomain provides a flexible framework for defining and managing business entiti
 - Maven 3.9+
 - Docker & Docker Compose
 
+### OpenCode
+
+```bash
+source /home/vagrant/.bashrc
+```
+
 ### Local Development (Without Docker)
 
 1. **Configure MySQL and Redis** (or use default):
