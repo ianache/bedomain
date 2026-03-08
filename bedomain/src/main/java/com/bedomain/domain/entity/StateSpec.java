@@ -26,6 +26,12 @@ public class StateSpec {
     @Column(nullable = false)
     private StateType type;
 
+    @Column(columnDefinition = "TEXT")
+    private String onEnterScript;
+
+    @Column(columnDefinition = "TEXT")
+    private String onExitScript;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "state_machine_id", nullable = false)
     private StateMachine stateMachine;

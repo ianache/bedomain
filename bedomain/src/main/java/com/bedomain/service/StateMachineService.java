@@ -48,6 +48,8 @@ public class StateMachineService {
                     .name(stateReq.getName())
                     .description(stateReq.getDescription())
                     .type(StateSpec.StateType.valueOf(stateReq.getType().toUpperCase()))
+                    .onEnterScript(stateReq.getOnEnterScript())
+                    .onExitScript(stateReq.getOnExitScript())
                     .build();
                 stateMachine.addState(stateSpec);
             }
@@ -128,6 +130,8 @@ public class StateMachineService {
                     .name(stateReq.getName())
                     .description(stateReq.getDescription())
                     .type(StateSpec.StateType.valueOf(stateReq.getType().toUpperCase()))
+                    .onEnterScript(stateReq.getOnEnterScript())
+                    .onExitScript(stateReq.getOnExitScript())
                     .build();
                 stateMachine.addState(stateSpec);
             }
@@ -191,6 +195,8 @@ public class StateMachineService {
                 .name(s.getName())
                 .description(s.getDescription())
                 .type(s.getType())
+                .onEnterScript(s.getOnEnterScript())
+                .onExitScript(s.getOnExitScript())
                 .build())
             .collect(Collectors.toList());
 

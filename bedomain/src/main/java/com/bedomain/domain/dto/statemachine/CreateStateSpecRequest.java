@@ -16,4 +16,10 @@ public class CreateStateSpecRequest {
 
     @NotBlank(message = "State type is required")
     private String type; // INITIAL, FINAL, INTERMEDIATE
+
+    @Size(max = 10000, message = "Script must not exceed 10000 characters")
+    private String onEnterScript;
+
+    @Size(max = 10000, message = "Script must not exceed 10000 characters")
+    private String onExitScript;
 }

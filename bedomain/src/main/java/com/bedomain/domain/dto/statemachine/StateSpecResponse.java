@@ -12,4 +12,6 @@ public class StateSpecResponse {
     private String name;
     private String description;
     private StateSpec.StateType type;
+    private String onEnterScript;
+    private String onExitScript;
 }
