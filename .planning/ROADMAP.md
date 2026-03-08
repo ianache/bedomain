@@ -7,11 +7,12 @@ A SpringBoot microservice for managing business entity definitions with configur
 ## Phases
 
 **Phase Numbering:**
-- Integer phases (1, 2, 3): Planned milestone work
+- Integer phases (1, 2, 3, 4): Planned milestone work
 
 - [x] **Phase 1: Entity Foundation** - Entity types, properties, instances, authentication, and core infrastructure (completed 2026-03-02)
 - [x] **Phase 2: State Machine Core** - State machine configuration, transitions, and history tracking (completed 2026-03-03)
 - [x] **Phase 3: Event Publishing** - Kafka event publishing for downstream integration (completed 2026-03-03)
+- [x] **Phase 4: State Hooks** - JavaScript execution for onEnter/onExit state hooks (completed 2026-03-08)
 
 ## Phase Details
 
@@ -48,6 +49,19 @@ A SpringBoot microservice for managing business entity definitions with configur
   4. Event payload includes entity ID, type, previous state, new state, timestamp, and user
   5. Application connects to Kafka for event publishing
 
+### Phase 4: State Hooks
+**Goal**: Execute JavaScript code on state entry/exit for business logic customization
+**Depends on**: Phase 3
+**Requirements**: HOOK-01, HOOK-02, HOOK-03, HOOK-04, HOOK-05, HOOK-06, HOOK-07
+**Success Criteria** (what must be TRUE):
+  1. State can have onEnter JavaScript code that executes when entering the state
+  2. State can have onExit JavaScript code that executes when exiting the state
+  3. Script has access to entity attributes (read/write)
+  4. Script execution is sandboxed for security
+  5. Script timeout prevents infinite loops
+  6. Script errors are logged and optionally block transition
+  7. Execution audit trail is maintained in StateHistory
+
 ## Progress
 
 **Execution Order:**
@@ -58,6 +72,7 @@ Phases execute in numeric order: 1 → 2 → 3
 | 1. Entity Foundation | 5/5 | Complete    | 2026-03-02 |
 | 2. State Machine Core | 2/2 | Complete    | 2026-03-03 |
 | 3. Event Publishing | 3/3 | Complete    | 2026-03-03 |
+| 4. State Hooks | 4/4 | Complete    | 2026-03-08 |
 
 **Phase 1 Plans:**
 - [x] 01-01-PLAN.md — Infrastructure & Security Setup (2026-03-01)
@@ -74,6 +89,12 @@ Phases execute in numeric order: 1 → 2 → 3
 - [x] 03-01-PLAN.md — Kafka Infrastructure Setup (2026-03-03)
 - [x] 03-02-PLAN.md — Event Publisher Service (2026-03-03)
 - [x] 03-03-PLAN.md — Event Integration (2026-03-03)
+
+**Phase 4 Plans:**
+- [x] 04-01-PLAN.md — State Script Fields (Model + DTOs)
+- [x] 04-02-PLAN.md — JavaScript Executor Engine (GraalJS)
+- [x] 04-03-PLAN.md — Hook Integration in StateTransition
+- [x] 04-04-PLAN.md — Unit Tests (TDD)
 
 ---
 

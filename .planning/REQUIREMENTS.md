@@ -84,6 +84,16 @@ All new phases must include JUnit tests with minimum 80% code coverage.
 - [ ] **TEST-04**: Phase 3 includes unit tests for Kafka event publishing
 - [ ] **TEST-05**: Phase 3 achieves 80%+ test coverage
 
+### State Hooks (JavaScript Execution)
+
+- [x] **HOOK-01**: State can have onEnter JavaScript code that executes when entering the state
+- [x] **HOOK-02**: State can have onExit JavaScript code that executes when exiting the state
+- [x] **HOOK-03**: Script has access to entity attributes (read/write)
+- [x] **HOOK-04**: Script execution is sandboxed for security
+- [x] **HOOK-05**: Script timeout prevents infinite loops
+- [x] **HOOK-06**: Script errors are logged and optionally block transition
+- [x] **HOOK-07**: Execution audit trail is maintained
+
 ## v2 Requirements
 
 Deferred to future release. Tracked but not in current roadmap.
@@ -174,11 +184,19 @@ Which phases cover which requirements. Updated during roadmap creation.
 | INFRA-02 | Phase 1 | Complete |
 | INFRA-03 | Phase 3 | Complete |
 | INFRA-04 | Phase 1 | Complete |
+| HOOK-01 | Phase 4 | Complete |
+| HOOK-02 | Phase 4 | Complete |
+| HOOK-03 | Phase 4 | Complete |
+| HOOK-04 | Phase 4 | Complete |
+| HOOK-05 | Phase 4 | Complete |
+| HOOK-06 | Phase 4 | Complete |
+| HOOK-07 | Phase 4 | Complete |
 
 **Coverage:**
 - v1 requirements: 39 total
 - Testing requirements: 5
-- Mapped to phases: 44
+- Hook requirements: 7
+- Mapped to phases: 51
 - Unmapped: 0 ✓
 
 ---
