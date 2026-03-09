@@ -13,6 +13,7 @@ A SpringBoot microservice for managing business entity definitions with configur
 - [x] **Phase 2: State Machine Core** - State machine configuration, transitions, and history tracking (completed 2026-03-03)
 - [x] **Phase 3: Event Publishing** - Kafka event publishing for downstream integration (completed 2026-03-03)
 - [x] **Phase 4: State Hooks** - JavaScript execution for onEnter/onExit state hooks (completed 2026-03-08)
+- [ ] **Phase 5: GitLab Integration** - Hook JavaScript para consumir API de GitLab (Test Case Demo)
 
 ## Phase Details
 
@@ -61,6 +62,17 @@ A SpringBoot microservice for managing business entity definitions with configur
   5. Script timeout prevents infinite loops
   6. Script errors are logged and optionally block transition
   7. Execution audit trail is maintained in StateHistory
+
+### Phase 5: GitLab Integration
+**Goal**: Demonstrar uso de hooks JavaScript para consumir API de GitLab al cerrar un Issue
+**Depends on**: Phase 4
+**Requirements**: HOOK-01, HOOK-02 (existing, reusing)
+**Success Criteria** (what must be TRUE):
+  1. Script JavaScript puede consumir API de GitLab desde onEnter hook
+  2. Script usa entity.issueId para identificar el issue
+  3. Script añade label "Bug :: Developer" al issue
+  4. Script maneja errores apropiadamente
+  5. Timeout de 2 segundos se respeta
 
 ## Progress
 
